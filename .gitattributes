@@ -1,0 +1,18 @@
+# Normalize line endings so the Linux CI build works regardless of Windows checkout
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+gradlew text eol=lf
+*.sh text eol=lf
+
+# Treat these as binary (never line-ending-converted)
+*.jar binary
+*.keystore binary
+*.jks binary
+*.png binary
+*.jpg binary
+*.webp binary
+*.ico binary
+*.ttf binary
+*.woff binary
+*.woff2 binary

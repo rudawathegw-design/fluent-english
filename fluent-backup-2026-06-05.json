@@ -1,0 +1,34 @@
+{
+  "app": "fluent",
+  "version": 1,
+  "exported": "2026-06-05T08:46:29.467Z",
+  "vocab": [
+    {
+      "id": "1780649142216503",
+      "word": "escalate the issue",
+      "mean": "raise a problem to senior management",
+      "ex": "We'll escalate the issue to the steering committee.",
+      "cat": "Risk & Issues",
+      "learned": false,
+      "box": 2,
+      "due": "2026-06-08",
+      "reps": 1,
+      "lapses": 0,
+      "created": "2026-06-05"
+    }
+  ],
+  "progress": {
+    "2026-06-05": {
+      "vocab": true,
+      "shadow": false,
+      "speak": false
+    }
+  },
+  "settings": {
+    "times": [
+      "07:00",
+      "13:00",
+      "21:00"
+    ]
+  }
+}

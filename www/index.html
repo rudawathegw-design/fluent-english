@@ -1,0 +1,743 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fluent — Daily English Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2EBDD;
+    --surface:#FCF9F2;
+    --surface-2:#F7F1E5;
+    --ink:#26211B;
+    --muted:#8C8273;
+    --line:#E3D9C6;
+    --green:#1B5A3A;
+    --green-soft:#E2EDE4;
+    --terra:#C25A36;
+    --terra-soft:#F6E4DA;
+    --gold:#C99A2E;
+    --shadow:0 1px 2px rgba(38,33,27,.06),0 8px 24px rgba(38,33,27,.07);
+    --shadow-lg:0 2px 6px rgba(38,33,27,.08),0 18px 50px rgba(38,33,27,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:"Outfit",sans-serif;-webkit-font-smoothing:antialiased}
+  body{
+    min-height:100vh;
+    background-image:radial-gradient(circle at 18% -10%,rgba(27,90,58,.06),transparent 40%),radial-gradient(circle at 95% 0%,rgba(194,90,54,.07),transparent 38%);
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:28px 18px 120px}
+  /* header */
+  header{margin-bottom:22px}
+  .brand{display:flex;align-items:baseline;gap:10px}
+  .brand .dot{width:11px;height:11px;border-radius:50%;background:var(--terra);transform:translateY(-2px)}
+  .brand h1{font-family:"Fraunces",serif;font-weight:600;font-size:30px;letter-spacing:-.5px}
+  .brand span{color:var(--muted);font-size:13.5px;letter-spacing:.3px}
+  .datebar{margin-top:6px;color:var(--muted);font-size:14px;font-weight:400}
+  /* streak band */
+  .streak{
+    margin-top:18px;display:flex;align-items:center;gap:18px;
+    background:var(--ink);color:#F6F0E4;border-radius:18px;padding:18px 22px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden;
+  }
+  .streak:after{content:"";position:absolute;right:-30px;top:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(201,154,46,.35),transparent 70%)}
+  .streak .num{font-family:"Fraunces",serif;font-size:48px;line-height:1;font-weight:600}
+  .streak .lbl{font-size:13px;color:#cdbfa6;margin-top:3px;letter-spacing:.2px}
+  .streak .flame{font-size:30px}
+  .streak .right{margin-left:auto;text-align:right;font-size:12.5px;color:#cdbfa6;line-height:1.5;z-index:1}
+  .streak .right b{color:#fff;font-weight:600}
+  /* tabs */
+  nav.tabs{position:fixed;bottom:0;left:0;right:0;background:rgba(252,249,242,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;justify-content:center;gap:2px;padding:8px 8px calc(8px + env(safe-area-inset-bottom));z-index:30}
+  nav.tabs button{flex:1;max-width:130px;border:0;background:transparent;color:var(--muted);font-family:inherit;font-size:11.5px;font-weight:500;padding:6px 4px;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:.18s;position:relative}
+  nav.tabs button svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.7}
+  nav.tabs button.active{color:var(--green)}
+  nav.tabs button.active{background:var(--green-soft)}
+  nav.tabs button .tabdot{position:absolute;top:4px;right:50%;transform:translateX(20px);width:7px;height:7px;border-radius:50%;background:var(--terra);border:1.5px solid var(--surface)}
+  /* panels */
+  .panel{display:none;animation:rise .35s cubic-bezier(.2,.7,.3,1)}
+  .panel.show{display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  h2.sec{font-family:"Fraunces",serif;font-size:21px;font-weight:600;margin:26px 0 4px}
+  p.sub{color:var(--muted);font-size:13.5px;margin-bottom:14px;line-height:1.5}
+  /* task cards */
+  .task{display:flex;align-items:center;gap:15px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:11px;box-shadow:var(--shadow);cursor:pointer;transition:.18s;user-select:none}
+  .task:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+  .task .ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+  .task .ico.v{background:var(--green-soft)}
+  .task .ico.s{background:var(--terra-soft)}
+  .task .ico.p{background:#F3ECCF}
+  .task .meta b{font-family:"Fraunces",serif;font-weight:600;font-size:16px;display:block}
+  .task .meta small{color:var(--muted);font-size:12.5px}
+  .check{margin-left:auto;width:28px;height:28px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;display:grid;place-items:center;transition:.18s}
+  .check svg{width:15px;height:15px;stroke:#fff;stroke-width:3;fill:none;opacity:0;transition:.15s}
+  .task.done{background:var(--green-soft);border-color:#bcd6c2}
+  .task.done .check{background:var(--green);border-color:var(--green)}
+  .task.done .check svg{opacity:1}
+  .task.done .meta b{text-decoration:none}
+  .ring-wrap{display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-top:4px;box-shadow:var(--shadow)}
+  .ring{width:58px;height:58px;flex-shrink:0}
+  .ring-wrap .t{font-size:13.5px;color:var(--muted)}
+  .ring-wrap .t b{color:var(--ink);font-weight:600}
+  .alldone{background:linear-gradient(135deg,var(--green),#0f3d27);color:#fff;border:0;text-align:center;padding:20px;border-radius:16px;margin-top:4px;display:none;box-shadow:var(--shadow-lg)}
+  .alldone.show{display:block;animation:rise .4s}
+  .alldone b{font-family:"Fraunces",serif;font-size:18px}
+  .alldone p{font-size:13px;color:#cfe3d4;margin-top:3px}
+  /* inputs */
+  .field{margin-bottom:11px}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;letter-spacing:.3px;text-transform:uppercase}
+  input,textarea,select{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:11px 13px;outline:none;transition:.15s}
+  input:focus,textarea:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+  textarea{resize:vertical;min-height:46px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .addcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-bottom:8px}
+  .addcard.editing{border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft),var(--shadow)}
+  .editbadge{font-size:11.5px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .btn{font-family:inherit;font-weight:600;font-size:14.5px;border:0;border-radius:11px;padding:11px 18px;cursor:pointer;transition:.15s}
+  .btn.green{background:var(--green);color:#fff;width:100%}
+  .btn.green:hover{background:#16492f}
+  .btn.ghost{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+  /* tools row */
+  .tools{display:flex;gap:8px;margin-bottom:12px}
+  .tools button{flex:1;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px;cursor:pointer;transition:.15s}
+  .tools button:hover{color:var(--ink);border-color:var(--muted)}
+  /* review CTA */
+  .review-cta{display:flex;align-items:center;gap:13px;background:linear-gradient(135deg,var(--green),#0f3d27);color:#fff;border:0;border-radius:16px;padding:15px 18px;margin-bottom:14px;width:100%;cursor:pointer;box-shadow:var(--shadow-lg);text-align:left;font-family:inherit;transition:.18s}
+  .review-cta:hover{transform:translateY(-1px)}
+  .review-cta .rc-ico{font-size:24px;flex-shrink:0}
+  .review-cta b{font-family:"Fraunces",serif;font-size:16px;display:block}
+  .review-cta small{color:#cfe3d4;font-size:12.5px}
+  .review-cta .rc-go{margin-left:auto;font-size:20px;flex-shrink:0}
+  .review-cta.muted{background:var(--surface-2);color:var(--ink);box-shadow:var(--shadow)}
+  .review-cta.muted small{color:var(--muted)}
+  /* vocab filters */
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 12px}
+  .chip{font-size:12.5px;font-weight:500;padding:6px 13px;border-radius:30px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;transition:.15s}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  /* word card */
+  .word{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);position:relative}
+  .word .top{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding-right:96px}
+  .word .w{font-family:"Fraunces",serif;font-weight:600;font-size:17.5px}
+  .word .tag{font-size:10.5px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;padding:3px 9px;border-radius:20px;background:var(--green-soft);color:var(--green)}
+  .word .mean{font-size:14px;margin-top:6px;line-height:1.45}
+  .word .ex{font-size:13.5px;color:var(--muted);font-style:italic;margin-top:6px;padding-left:11px;border-left:2px solid var(--line);line-height:1.45}
+  .word .acts{position:absolute;top:12px;right:12px;display:flex;gap:6px}
+  .word .acts button{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);cursor:pointer;display:grid;place-items:center;font-size:13px;color:var(--muted);transition:.15s}
+  .word .acts button:hover{color:var(--ink);border-color:var(--muted)}
+  .word .foot{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .word .box-dots{display:flex;gap:3px}
+  .word .box-dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+  .word .box-dots i.on{background:var(--green)}
+  .word .due{font-size:11.5px;color:var(--muted)}
+  .word .due.now{color:var(--terra);font-weight:600}
+  .word.learned{opacity:.78;background:var(--surface-2)}
+  .word.learned .w{text-decoration:line-through;text-decoration-color:var(--muted)}
+  .empty{text-align:center;color:var(--muted);font-size:14px;padding:34px 10px;border:1px dashed var(--line);border-radius:14px}
+  /* shadowing */
+  .yt{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);text-decoration:none;color:inherit;transition:.18s}
+  .yt:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg);border-color:var(--terra)}
+  .yt .pl{width:44px;height:44px;border-radius:11px;background:var(--terra-soft);display:grid;place-items:center;flex-shrink:0}
+  .yt .pl svg{width:20px;height:20px;fill:var(--terra)}
+  .yt b{font-family:"Fraunces",serif;font-size:15.5px;font-weight:600;display:block}
+  .yt small{color:var(--muted);font-size:12.5px}
+  .yt .go{margin-left:auto;color:var(--muted);font-size:18px}
+  .howto{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:15px 17px;margin:6px 0 16px}
+  .howto b{font-family:"Fraunces",serif;font-size:15px}
+  .howto ol{margin:9px 0 0 18px;font-size:13.5px;line-height:1.7;color:#4a443b}
+  /* speaking */
+  .prompt-box{background:var(--ink);color:#ECE4D4;border-radius:16px;padding:18px 19px;font-size:13.5px;line-height:1.65;box-shadow:var(--shadow-lg);position:relative}
+  .prompt-box .copy{position:absolute;top:13px;right:13px;background:rgba(255,255,255,.1);color:#fff;border:0;border-radius:9px;padding:7px 13px;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:.15s}
+  .prompt-box .copy:hover{background:rgba(255,255,255,.2)}
+  .prompt-box p{margin-bottom:9px}
+  .note{font-size:13px;color:var(--muted);line-height:1.6;margin-top:13px}
+  .note b{color:var(--ink)}
+  /* progress */
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:6px 0 22px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 16px;box-shadow:var(--shadow)}
+  .stat .n{font-family:"Fraunces",serif;font-size:30px;font-weight:600;line-height:1}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:5px}
+  .grid-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+  .cell{aspect-ratio:1;border-radius:6px;background:var(--surface-2);position:relative}
+  .cell[data-lv="1"]{background:#cfe0d2}
+  .cell[data-lv="2"]{background:#86b59a}
+  .cell[data-lv="3"]{background:var(--green)}
+  .cell.today{box-shadow:0 0 0 2px var(--terra)}
+  .legend{display:flex;align-items:center;gap:6px;justify-content:flex-end;font-size:11.5px;color:var(--muted);margin-top:10px}
+  .legend i{width:13px;height:13px;border-radius:4px;display:inline-block}
+  .reminders{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-top:20px}
+  .reminders .rt{display:flex;gap:10px;margin-top:10px}
+  .reminders input{text-align:center}
+  .loading{text-align:center;padding:60px 0;color:var(--muted);font-size:14px}
+  .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 20px;border-radius:30px;font-size:13.5px;font-weight:500;opacity:0;transition:.25s;z-index:80;box-shadow:var(--shadow-lg);pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  /* review overlay */
+  .overlay{position:fixed;inset:0;background:rgba(38,33,27,.55);backdrop-filter:blur(4px);z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:.2s}
+  .overlay.show{opacity:1;pointer-events:auto}
+  .rev-card{background:var(--surface);border-radius:22px;box-shadow:var(--shadow-lg);width:100%;max-width:440px;padding:22px;animation:rise .3s}
+  .rev-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .rev-head .prog{font-size:13px;color:var(--muted);font-weight:600}
+  .rev-head .x{background:none;border:0;font-size:18px;color:var(--muted);cursor:pointer;line-height:1;padding:4px}
+  .rev-bar{height:5px;border-radius:4px;background:var(--surface-2);overflow:hidden;margin-bottom:18px}
+  .rev-bar i{display:block;height:100%;background:var(--green);transition:.35s ease}
+  .flashcard{min-height:210px;border:1px solid var(--line);border-radius:16px;padding:26px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;background:var(--surface-2);user-select:none}
+  .flashcard .fc-tag{font-size:10.5px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;padding:3px 9px;border-radius:20px;background:var(--green-soft);color:var(--green);margin-bottom:14px}
+  .flashcard .fc-word{font-family:"Fraunces",serif;font-weight:600;font-size:26px;line-height:1.2}
+  .flashcard .fc-hint{font-size:12.5px;color:var(--muted);margin-top:18px}
+  .flashcard .fc-divider{width:42px;height:2px;background:var(--line);margin:16px 0}
+  .flashcard .fc-mean{font-size:16px;line-height:1.5}
+  .flashcard .fc-ex{font-size:14px;color:var(--muted);font-style:italic;margin-top:14px;padding-left:12px;border-left:2px solid var(--line);text-align:left;line-height:1.45}
+  .rev-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+  .rev-actions button{font-family:inherit;font-weight:600;font-size:15px;border:0;border-radius:12px;padding:14px;cursor:pointer;transition:.15s}
+  .rev-actions .again{background:var(--terra-soft);color:var(--terra)}
+  .rev-actions .again:hover{background:#f0d3c4}
+  .rev-actions .good{background:var(--green);color:#fff}
+  .rev-actions .good:hover{background:#16492f}
+  .rev-done{text-align:center;padding:14px 6px}
+  .rev-done .big{font-size:44px}
+  .rev-done b{font-family:"Fraunces",serif;font-size:20px;display:block;margin-top:10px}
+  .rev-done p{color:var(--muted);font-size:13.5px;margin-top:6px;line-height:1.5}
+  /* license gate */
+  .gate{position:fixed;inset:0;z-index:100;background:var(--paper);background-image:radial-gradient(circle at 18% -10%,rgba(27,90,58,.07),transparent 40%),radial-gradient(circle at 95% 0%,rgba(194,90,54,.08),transparent 38%);display:flex;align-items:center;justify-content:center;padding:22px;transition:opacity .3s}
+  .gate.hidden{opacity:0;pointer-events:none}
+  .gate-card{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow-lg);padding:26px 22px}
+  .gate-card .brand{justify-content:center;margin-bottom:14px}
+  .gate-card .brand h1{font-size:32px}
+  .gate-lead{color:var(--ink);font-size:15px;text-align:center;margin-bottom:16px;line-height:1.5}
+  .gate-warn{background:var(--terra-soft);color:var(--terra);border-radius:10px;padding:9px 12px;font-size:13px;text-align:center;margin-bottom:12px;font-weight:600}
+  .gate-card textarea{min-height:84px;margin-bottom:12px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;word-break:break-all}
+  .gate-id{margin-top:16px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.7}
+  .gate-id code{display:inline-block;margin-top:3px;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:3px 8px;font-size:11.5px;color:var(--ink);word-break:break-all}
+  .gate-id span{display:block;margin-top:5px}
+  .gate-dismiss{display:block;width:100%;text-align:center;margin-top:12px;background:none;border:0;color:var(--muted);font-family:inherit;font-size:13px;cursor:pointer;text-decoration:underline}
+</style>
+
+<div id="gate" class="gate">
+  <div class="gate-card">
+    <div class="brand"><span class="dot"></span><h1>Fluent</h1></div>
+    <p class="gate-lead">Checking your license…</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="dot"></span><h1>Fluent</h1><span>your daily English program</span></div>
+    <div class="datebar" id="datebar"></div>
+    <div class="streak">
+      <div class="flame">🔥</div>
+      <div>
+        <div class="num" id="streakNum">0</div>
+        <div class="lbl">day streak · any practice counts</div>
+      </div>
+      <div class="right">
+        Best: <b id="bestStreak">0</b><br>
+        Words saved: <b id="wordCount">0</b>
+      </div>
+    </div>
+  </header>
+
+  <div id="app"><div class="loading">Loading your progress…</div></div>
+</div>
+
+<nav class="tabs" id="tabs" style="display:none">
+  <button data-tab="today" class="active"><svg viewBox="0 0 24 24"><path d="M3 12l2-2 7-7 7 7 2 2"/><path d="M5 10v10h14V10"/></svg>Today</button>
+  <button data-tab="words"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg>Words</button>
+  <button data-tab="shadow"><svg viewBox="0 0 24 24"><path d="M12 3v18M8 7v10M16 7v10M4 11v2M20 11v2"/></svg>Shadow</button>
+  <button data-tab="speak"><svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Speak</button>
+  <button data-tab="progress"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16V9M13 16V6M18 16v-4"/></svg>Progress</button>
+</nav>
+
+<div class="overlay" id="overlay"></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="importFile" accept="application/json,.json" style="display:none">
+
+<script>
+// ---------- storage layer (persistent, with real fallbacks) ----------
+// Priority: host window.storage  ->  browser/WebView localStorage  ->  in-memory (last resort).
+const mem = {};
+const HAS = typeof window !== "undefined" && typeof window.storage !== "undefined" && window.storage;
+const LS = (()=>{ try{ const k="__fluent_test"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }catch(e){ return false; } })();
+const LS_PREFIX = "fluent:";
+async function load(key, fb){
+  try{
+    if(HAS){ const r = await window.storage.get(key, false); return r && r.value != null ? JSON.parse(r.value) : fb; }
+    if(LS){ const v = localStorage.getItem(LS_PREFIX+key); return v != null ? JSON.parse(v) : fb; }
+    return key in mem ? mem[key] : fb;
+  }catch(e){ return fb; }
+}
+async function save(key, val){
+  try{
+    if(HAS){ await window.storage.set(key, JSON.stringify(val), false); return; }
+    if(LS){ localStorage.setItem(LS_PREFIX+key, JSON.stringify(val)); return; }
+    mem[key]=val;
+  }catch(e){ console.error("save failed", e); }
+}
+
+// ---------- date helpers ----------
+function dateKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+const today = dateKey(new Date());
+function addDaysKey(n){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+n);return dateKey(d);}
+function daysBetween(aKey,bKey){const a=new Date(aKey+"T00:00:00"),b=new Date(bKey+"T00:00:00");return Math.round((b-a)/86400000);}
+
+// ---------- spaced repetition (Leitner) ----------
+const BOX_DAYS=[0,1,3,7,16,35]; // index by box value (1..5)
+const MAX_BOX=5;
+
+// ---------- state ----------
+let vocab = [];
+let progress = {};
+let settings = {times:["07:00","13:00","21:00"]};
+let rev = {active:false,queue:[],flipped:false,done:0};
+const CATS = ["PMO / Project","Meetings","Risk & Issues","Email","General"];
+
+const SHADOW_LINKS = [
+  {t:"BBC Learning English", s:"Clear, slow, perfect for daily shadowing", q:"bbc learning english pronunciation"},
+  {t:"Business meeting phrases", s:"The exact language you use as a PMO", q:"business english meeting phrases practice"},
+  {t:"Intermediate shadowing practice", s:"Repeat-after-me style, line by line", q:"english shadowing practice intermediate"},
+  {t:"Short TED Talks (5 min)", s:"Real natural speed once you warm up", q:"ted talks short 5 minutes"},
+  {t:"Connected speech & linking", s:"Why natives sound fast — copy the rhythm", q:"english connected speech shadowing"},
+  {t:"Project management explained", s:"Field vocabulary in context", q:"project management explained simply english"},
+];
+
+// ---------- helpers ----------
+const $ = s=>document.querySelector(s);
+const app = $("#app");
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),1800);}
+function dprog(date){return progress[date]||{vocab:false,shadow:false,speak:false};}
+function dayLevel(date){const p=dprog(date);return (p.vocab?1:0)+(p.shadow?1:0)+(p.speak?1:0);}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function dueCount(){return vocab.filter(w=>(w.due||today)<=today).length;}
+function relDue(key){
+  const n=daysBetween(today,key);
+  if(n<=0) return "due now";
+  if(n===1) return "next: tomorrow";
+  if(n<7) return "next: in "+n+" days";
+  if(n<14) return "next: in 1 week";
+  return "next: in "+Math.round(n/7)+" weeks";
+}
+function migrate(){
+  let changed=false;
+  vocab.forEach(w=>{
+    if(w.box==null){ w.box = w.learned ? MAX_BOX : 1; changed=true; }
+    if(w.due==null){ w.due = today; changed=true; }
+    if(w.reps==null){ w.reps = 0; changed=true; }
+    if(w.lapses==null){ w.lapses = 0; changed=true; }
+    if(w.created==null){
+      const ts = parseInt(w.id,10);
+      w.created = (!isNaN(ts) && ts>1000000000000) ? dateKey(new Date(ts)) : today;
+      changed=true;
+    }
+  });
+  if(changed) save("vocab",vocab);
+}
+
+function computeStreaks(){
+  let best=0, run=0;
+  for(let i=400;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    if(dayLevel(dateKey(d))>0){ run++; if(run>best) best=run; } else run=0;
+  }
+  let cur=0;
+  for(let i=0;i<400;i++){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const active = dayLevel(dateKey(d))>0;
+    if(active){ cur++; }
+    else if(i===0){ continue; }
+    else break;
+  }
+  return {cur, best:Math.max(best,cur)};
+}
+
+// ---------- render ----------
+function renderHeader(){
+  const d=new Date();
+  $("#datebar").textContent = d.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"});
+  const {cur,best}=computeStreaks();
+  $("#streakNum").textContent=cur;
+  $("#bestStreak").textContent=best;
+  $("#wordCount").textContent=vocab.length;
+  const wb=document.querySelector('#tabs button[data-tab="words"]');
+  if(wb){ const old=wb.querySelector(".tabdot"); if(old)old.remove(); if(dueCount()>0){ const s=document.createElement("span"); s.className="tabdot"; wb.appendChild(s); } }
+}
+
+function tabToday(){
+  const p=dprog(today);
+  const done=(p.vocab?1:0)+(p.shadow?1:0)+(p.speak?1:0);
+  const pct=Math.round(done/3*100);
+  const r=24, c=2*Math.PI*r, off=c-(done/3)*c;
+  const due=dueCount();
+  const vocabSub = due>0 ? `${due} card${due===1?'':'s'} due to review + add new ones` : "Review your words + add 5 new ones";
+  return `
+  <h2 class="sec">Today's three steps</h2>
+  <p class="sub">Small and daily beats big and rare. Tap each one when it's done.</p>
+  <div class="task ${p.vocab?'done':''}" data-task="vocab">
+    <div class="ico v">📘</div>
+    <div class="meta"><b>Vocabulary</b><small>${esc(vocabSub)}</small></div>
+    <div class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+  </div>
+  <div class="task ${p.shadow?'done':''}" data-task="shadow">
+    <div class="ico s">🎧</div>
+    <div class="meta"><b>Shadowing</b><small>10 min — copy a clip out loud, 3 times</small></div>
+    <div class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+  </div>
+  <div class="task ${p.speak?'done':''}" data-task="speak">
+    <div class="ico p">🗣️</div>
+    <div class="meta"><b>Speaking</b><small>20 min — talk with your AI coach</small></div>
+    <div class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+  </div>
+  <div class="ring-wrap" ${done===3?'style="display:none"':''}>
+    <svg class="ring" viewBox="0 0 60 60"><circle cx="30" cy="30" r="${r}" fill="none" stroke="var(--line)" stroke-width="6"/>
+    <circle cx="30" cy="30" r="${r}" fill="none" stroke="var(--green)" stroke-width="6" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 30 30)"/></svg>
+    <div class="t"><b>${done} of 3</b> done today<br><span style="color:var(--muted)">${pct}% — keep going</span></div>
+  </div>
+  <div class="alldone ${done===3?'show':''}"><b>Perfect day complete 🎉</b><p>You showed up. That's how fluency is built — one day at a time.</p></div>
+  `;
+}
+
+function tabWords(state){
+  const active = state.cat || "all";
+  const due = dueCount();
+  const editing = state.editId ? vocab.find(w=>w.id===state.editId) : null;
+  const filtered = vocab.filter(w=> active==="all" || w.cat===active).slice().reverse();
+  const chips = ['<span class="chip '+(active==="all"?"on":"")+'" data-cat="all">All</span>']
+    .concat(CATS.map(c=>'<span class="chip '+(active===c?"on":"")+'" data-cat="'+c+'">'+c+'</span>')).join("");
+  const cta = vocab.length ? (due
+    ? `<button class="review-cta" id="startReview"><span class="rc-ico">🎯</span><span><b>${due} card${due===1?'':'s'} due for review</b><small>A quick flashcard round locks them into memory</small></span><span class="rc-go">→</span></button>`
+    : `<button class="review-cta muted" id="startReview"><span class="rc-ico">✅</span><span><b>All caught up for today</b><small>Nothing due — tap to review early anyway</small></span><span class="rc-go">→</span></button>`)
+    : "";
+  const list = filtered.length ? filtered.map(w=>{
+    const wdue = w.due||today;
+    const dots=[1,2,3,4,5].map(n=>`<i class="${(w.box||1)>=n?'on':''}"></i>`).join("");
+    return `
+    <div class="word ${w.learned?'learned':''}" data-id="${w.id}">
+      <div class="acts">
+        <button data-act="edit" title="Edit" aria-label="Edit word">✎</button>
+        <button data-act="learn" title="${w.learned?'Move back to learning':'Mark learned'}" aria-label="Toggle learned">${w.learned?'↩':'✓'}</button>
+        <button data-act="del" title="Delete" aria-label="Delete word">✕</button>
+      </div>
+      <div class="top"><span class="w">${esc(w.word)}</span><span class="tag">${esc(w.cat)}</span></div>
+      <div class="mean">${esc(w.mean)}</div>
+      ${w.ex?`<div class="ex">${esc(w.ex)}</div>`:""}
+      <div class="foot"><span class="box-dots" title="Memory strength">${dots}</span><span class="due ${wdue<=today?'now':''}">${relDue(wdue)}</span></div>
+    </div>`;
+  }).join("")
+    : '<div class="empty">No words here yet.<br>Add your first phrase above — write the meaning <i>and</i> a real example.</div>';
+  return `
+  <h2 class="sec">Your vocabulary</h2>
+  <p class="sub">Save phrases, not single words. Always add an example of how you'd really use it.</p>
+  ${cta}
+  <div class="addcard ${editing?'editing':''}">
+    ${editing?'<div class="editbadge">✎ Editing word</div>':''}
+    <div class="field"><label>Word or phrase</label><input id="f-word" value="${editing?esc(editing.word):''}" placeholder="e.g. escalate the issue"></div>
+    <div class="field"><label>Meaning</label><textarea id="f-mean" placeholder="raise a problem to a higher level / manager">${editing?esc(editing.mean):''}</textarea></div>
+    <div class="field"><label>Example (use it properly)</label><textarea id="f-ex" placeholder="If the vendor misses the deadline again, we'll escalate the issue to the steering committee.">${editing?esc(editing.ex||''):''}</textarea></div>
+    <div class="field"><label>Category</label><select id="f-cat">${CATS.map(c=>'<option'+((editing&&editing.cat===c)?' selected':'')+'>'+c+'</option>').join("")}</select></div>
+    <button class="btn green" id="addWord">${editing?'Update word':'+ Save word'}</button>
+    ${editing?'<button class="btn ghost" id="cancelEdit" style="width:100%;margin-top:8px">Cancel</button>':''}
+  </div>
+  <div class="tools">
+    <button id="exportWords">⬇ Export backup</button>
+    <button id="importWords">⬆ Import</button>
+  </div>
+  <div class="chips">${chips}</div>
+  ${list}`;
+}
+
+function tabShadow(){
+  const p=dprog(today);
+  return `
+  <h2 class="sec">Shadowing practice</h2>
+  <p class="sub">Open a video, play a short part, and speak <i>at the same time</i> as the speaker. Copy their rhythm, not just the words.</p>
+  <div class="howto">
+    <b>How to shadow (10 min)</b>
+    <ol>
+      <li>Pick one clip and play 20–30 seconds.</li>
+      <li>Play again and speak along out loud, matching their speed and stress.</li>
+      <li>Repeat the same part 3 times until it feels smooth.</li>
+      <li>Come back and mark "Shadowing" done on the Today tab.</li>
+    </ol>
+  </div>
+  ${SHADOW_LINKS.map(l=>`
+    <a class="yt" href="https://www.youtube.com/results?search_query=${encodeURIComponent(l.q)}" target="_blank" rel="noopener">
+      <div class="pl"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      <div><b>${l.t}</b><small>${l.s}</small></div>
+      <div class="go">↗</div>
+    </a>`).join("")}
+  <button class="btn ${p.shadow?'ghost':'green'}" id="markShadow" style="margin-top:6px">${p.shadow?'✓ Shadowing done today':'Mark shadowing done'}</button>`;
+}
+
+const PROMPT = `You are my English speaking coach. I'm a Kurdish PMO professional in Iraq. I understand English and can speak, but not fluently, and my vocabulary is limited. We'll have a spoken conversation about real project-management situations — stakeholders, risks, deadlines, status updates, meetings.
+
+Rules:
+1. Talk to me naturally, one question at a time.
+2. Keep your sentences simple but use real professional vocabulary.
+3. When I make a mistake or say something unnatural, don't stop the conversation — just briefly give me the better version, then continue.
+4. At the end, list the 5 most useful words or phrases from our talk so I can add them to my flashcards.
+
+Start by asking me about a project I'm working on now.`;
+
+function tabSpeak(){
+  const p=dprog(today);
+  return `
+  <h2 class="sec">Speaking with your AI coach</h2>
+  <p class="sub">This is the most important step for fluency. Use voice mode in the Claude app (or any AI voice chat) and paste this prompt to begin.</p>
+  <div class="prompt-box">
+    <button class="copy" id="copyPrompt">Copy</button>
+    ${PROMPT.split("\n\n").map(b=>"<p>"+esc(b).replace(/\n/g,"<br>")+"</p>").join("")}
+  </div>
+  <div class="note">
+    <b>Why this works:</b> rule 4 gives you 5 fresh phrases at the end of every talk — copy them straight into your <b>Words</b> tab. That closes the loop between speaking and vocabulary.<br><br>
+    Talk for ~20 minutes, out loud, even when it's slow. Slow-but-spoken beats perfect-but-silent every time.
+  </div>
+  <button class="btn ${p.speak?'ghost':'green'}" id="markSpeak" style="margin-top:16px">${p.speak?'✓ Speaking done today':'Mark speaking done'}</button>`;
+}
+
+function tabProgress(){
+  const {cur,best}=computeStreaks();
+  const learned=vocab.filter(w=>w.learned).length;
+  const cells=[];
+  for(let i=34;i>=0;i--){
+    const ds=new Date(); ds.setDate(ds.getDate()-i);
+    const key=dateKey(ds);
+    cells.push(`<div class="cell ${key===today?'today':''}" data-lv="${dayLevel(key)}" title="${key}"></div>`);
+  }
+  return `
+  <h2 class="sec">Your progress</h2>
+  <p class="sub">Proof that you're showing up. Watch the squares fill in.</p>
+  <div class="stats">
+    <div class="stat"><div class="n">${cur}</div><div class="l">Current streak (days)</div></div>
+    <div class="stat"><div class="n">${best}</div><div class="l">Longest streak</div></div>
+    <div class="stat"><div class="n">${vocab.length}</div><div class="l">Words saved</div></div>
+    <div class="stat"><div class="n">${learned}</div><div class="l">Words mastered</div></div>
+  </div>
+  <h2 class="sec" style="font-size:17px">Last 5 weeks</h2>
+  <div class="grid-cal">${cells.join("")}</div>
+  <div class="legend">Less <i style="background:var(--surface-2)"></i><i style="background:#cfe0d2"></i><i style="background:#86b59a"></i><i style="background:var(--green)"></i> More</div>
+  <div class="reminders">
+    <b style="font-family:Fraunces,serif;font-size:15px">⏰ Your daily reminders</b>
+    <p class="sub" style="margin:7px 0 0">This app can't send phone alerts, so set three alarms on your phone at these times. Fixed times beat willpower.</p>
+    <div class="rt">
+      <input type="time" id="t0" value="${settings.times[0]}">
+      <input type="time" id="t1" value="${settings.times[1]}">
+      <input type="time" id="t2" value="${settings.times[2]}">
+    </div>
+    <button class="btn ghost" id="saveTimes" style="width:100%;margin-top:10px">Save my times</button>
+  </div>
+  <div class="reminders" style="margin-top:14px">
+    <b style="font-family:Fraunces,serif;font-size:15px">📦 App</b>
+    <p class="sub" style="margin:7px 0 0">Version <b id="appVer">…</b> · updates install automatically inside the app.</p>
+    <div class="rt" style="gap:8px">
+      <button class="btn ghost" id="checkUpdates" style="flex:1">Check for updates</button>
+      <button class="btn ghost" id="enterLicense" style="flex:1">Enter license key</button>
+    </div>
+  </div>`;
+}
+
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+// ---------- review session ----------
+function openReview(){
+  const queue = vocab.filter(w=>(w.due||today)<=today).map(w=>w.id);
+  if(!queue.length){
+    if(!vocab.length){ toast("Add a few words first"); return; }
+    rev = {active:true, queue:shuffle(vocab.map(w=>w.id)), flipped:false, done:0};
+  } else {
+    rev = {active:true, queue:shuffle(queue), flipped:false, done:0};
+  }
+  renderReview();
+  $("#overlay").classList.add("show");
+}
+function closeReview(){
+  rev.active=false;
+  $("#overlay").classList.remove("show");
+  setTimeout(()=>{ if(!rev.active) $("#overlay").innerHTML=""; },220);
+  render();
+}
+async function gradeCard(grade){
+  const id=rev.queue.shift();
+  const w=vocab.find(x=>x.id===id);
+  if(!w){ renderReview(); return; }
+  w.reps=(w.reps||0)+1;
+  if(grade==="good"){
+    w.box=Math.min((w.box||1)+1, MAX_BOX);
+    w.due=addDaysKey(BOX_DAYS[w.box]);
+    if(w.box>=MAX_BOX) w.learned=true;
+    rev.done++;
+  } else {
+    w.box=1; w.lapses=(w.lapses||0)+1; w.due=today;
+    rev.queue.push(id);
+  }
+  rev.flipped=false;
+  await save("vocab",vocab);
+  if(!rev.queue.length){
+    const p=dprog(today);
+    if(!p.vocab){ p.vocab=true; progress[today]=p; await save("progress",progress); }
+  }
+  renderReview();
+}
+function renderReview(){
+  const ov=$("#overlay");
+  if(!rev.queue.length){
+    ov.innerHTML=`<div class="rev-card"><div class="rev-done"><div class="big">🎉</div><b>Review complete</b><p>You reviewed ${rev.done} card${rev.done===1?'':'s'}. Spaced repetition is what moves words into long-term memory — see you tomorrow.</p><button class="btn green" id="revClose" style="margin-top:18px">Done</button></div></div>`;
+    return;
+  }
+  const w=vocab.find(x=>x.id===rev.queue[0]);
+  const uniqueRem=new Set(rev.queue).size;
+  const pct=Math.round(rev.done/(rev.done+uniqueRem)*100);
+  ov.innerHTML=`
+  <div class="rev-card">
+    <div class="rev-head"><span class="prog">${uniqueRem} to review</span><button class="x" id="revClose" aria-label="Close review">✕</button></div>
+    <div class="rev-bar"><i style="width:${pct}%"></i></div>
+    <div class="flashcard" id="flip">
+      <span class="fc-tag">${esc(w.cat)}</span>
+      <div class="fc-word">${esc(w.word)}</div>
+      ${rev.flipped
+        ? `<div class="fc-divider"></div><div class="fc-mean">${esc(w.mean)}</div>${w.ex?`<div class="fc-ex">${esc(w.ex)}</div>`:""}`
+        : `<div class="fc-hint">Tap to reveal meaning</div>`}
+    </div>
+    ${rev.flipped
+      ? `<div class="rev-actions"><button class="again" data-rev="again">Again</button><button class="good" data-rev="good">Got it ✓</button></div>`
+      : ``}
+  </div>`;
+}
+
+// ---------- backup / restore ----------
+function exportData(){
+  const payload={app:"fluent",version:1,exported:new Date().toISOString(),vocab,progress,settings};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download="fluent-backup-"+today+".json";
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  toast("Backup downloaded ✓");
+}
+async function importData(file){
+  try{
+    const data=JSON.parse(await file.text());
+    const incoming = Array.isArray(data) ? data : (data.vocab||[]);
+    const byId={}; vocab.forEach(w=>byId[w.id]=w);
+    let added=0;
+    incoming.forEach(w=>{
+      if(!w||!w.word) return;
+      const id = w.id || (Date.now()+""+Math.floor(Math.random()*999));
+      if(!byId[id]) added++;
+      byId[id]=Object.assign({box:1,due:today,reps:0,lapses:0,learned:false,cat:CATS[CATS.length-1],ex:"",created:today}, w, {id});
+    });
+    vocab=Object.values(byId);
+    await save("vocab",vocab);
+    if(data.progress && typeof data.progress==="object"){
+      for(const k in data.progress){
+        const a=progress[k]||{vocab:false,shadow:false,speak:false}, b=data.progress[k]||{};
+        progress[k]={vocab:!!(a.vocab||b.vocab),shadow:!!(a.shadow||b.shadow),speak:!!(a.speak||b.speak)};
+      }
+      await save("progress",progress);
+    }
+    migrate();
+    toast("Imported "+added+" new word"+(added===1?"":"s")+" ✓");
+    render();
+  }catch(e){ toast("Couldn't read that file"); }
+}
+
+// ---------- controller ----------
+let current="today";
+let wordsState={cat:"all",editId:null};
+
+function render(){
+  renderHeader();
+  if(current==="today") app.innerHTML=tabToday();
+  else if(current==="words") app.innerHTML=tabWords(wordsState);
+  else if(current==="shadow") app.innerHTML=tabShadow();
+  else if(current==="speak") app.innerHTML=tabSpeak();
+  else if(current==="progress"){ app.innerHTML=tabProgress(); const _v=document.getElementById("appVer"); if(_v) _v.textContent = window.FLUENT_VERSION || "1.0.0"; }
+}
+
+// tab nav
+$("#tabs").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b)return;
+  current=b.dataset.tab;
+  if(current!=="words") wordsState.editId=null;
+  document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("active",x===b));
+  render();
+});
+
+// review overlay actions
+$("#overlay").addEventListener("click", async e=>{
+  if(e.target.id==="revClose"){ closeReview(); return; }
+  if(e.target.closest("#flip") && !rev.flipped){ rev.flipped=true; renderReview(); return; }
+  const rb=e.target.closest("[data-rev]");
+  if(rb){ await gradeCard(rb.dataset.rev); return; }
+});
+
+// hidden import picker
+$("#importFile").addEventListener("change", e=>{
+  const f=e.target.files && e.target.files[0];
+  if(f) importData(f);
+  e.target.value="";
+});
+
+// delegated actions in main panel
+app.addEventListener("click", async e=>{
+  const task=e.target.closest(".task");
+  if(task){
+    const k=task.dataset.task; const p=dprog(today); p[k]=!p[k]; progress[today]=p;
+    await save("progress",progress); render(); return;
+  }
+  if(e.target.closest("#startReview")){ openReview(); return; }
+  if(e.target.id==="addWord"){
+    const word=$("#f-word").value.trim(), mean=$("#f-mean").value.trim(), ex=$("#f-ex").value.trim(), cat=$("#f-cat").value;
+    if(!word||!mean){toast("Add at least a word and its meaning");return;}
+    if(wordsState.editId){
+      const w=vocab.find(x=>x.id===wordsState.editId);
+      if(w){ w.word=word; w.mean=mean; w.ex=ex; w.cat=cat; }
+      wordsState.editId=null;
+      await save("vocab",vocab); toast("Word updated ✓"); render(); return;
+    }
+    vocab.push({id:Date.now()+""+Math.floor(Math.random()*999),word,mean,ex,cat,learned:false,box:1,due:today,reps:0,lapses:0,created:today});
+    await save("vocab",vocab); toast("Word saved ✓"); render(); return;
+  }
+  if(e.target.id==="cancelEdit"){ wordsState.editId=null; render(); return; }
+  if(e.target.id==="exportWords"){ exportData(); return; }
+  if(e.target.id==="importWords"){ $("#importFile").click(); return; }
+  const chip=e.target.closest(".chip");
+  if(chip){ wordsState.cat=chip.dataset.cat; render(); return; }
+  const wc=e.target.closest(".word");
+  if(wc && e.target.dataset.act){
+    const id=wc.dataset.id; const w=vocab.find(x=>x.id===id);
+    if(e.target.dataset.act==="edit"){ wordsState.editId=id; render(); window.scrollTo({top:0,behavior:"smooth"}); return; }
+    if(e.target.dataset.act==="learn"){ w.learned=!w.learned; if(w.learned) w.box=MAX_BOX; await save("vocab",vocab); render(); }
+    if(e.target.dataset.act==="del"){ if(wordsState.editId===id) wordsState.editId=null; vocab=vocab.filter(x=>x.id!==id); await save("vocab",vocab); toast("Deleted"); render(); }
+    return;
+  }
+  if(e.target.id==="markShadow"){ const p=dprog(today); p.shadow=!p.shadow; progress[today]=p; await save("progress",progress); render(); return; }
+  if(e.target.id==="markSpeak"){ const p=dprog(today); p.speak=!p.speak; progress[today]=p; await save("progress",progress); render(); return; }
+  if(e.target.id==="copyPrompt"){
+    try{ await navigator.clipboard.writeText(PROMPT); toast("Prompt copied ✓"); }
+    catch(_){ toast("Select and copy the text"); }
+    return;
+  }
+  if(e.target.id==="saveTimes"){
+    settings.times=[$("#t0").value,$("#t1").value,$("#t2").value];
+    await save("settings",settings); toast("Times saved — now set phone alarms ⏰"); return;
+  }
+  // app: updates / license
+  if(e.target.id==="checkUpdates"){ if(window.FluentUpdater) FluentUpdater.check({manual:true}); else toast("Updates run in the installed app"); return; }
+  if(e.target.id==="enterLicense"){ if(window.FluentLicense) FluentLicense.openGate(); return; }
+});
+
+// ---------- boot (called by the license gate once unlocked) ----------
+window.bootApp = async function(){
+  if(window.__fluentBooted) return; window.__fluentBooted = true;
+  vocab = await load("vocab", []);
+  progress = await load("progress", {});
+  settings = await load("settings", {times:["07:00","13:00","21:00"]});
+  if(!Array.isArray(vocab)) vocab=[];
+  if(!progress || typeof progress!=="object") progress={};
+  migrate();
+  $("#tabs").style.display="flex";
+  render();
+  if(window.FluentUpdater && window.FluentUpdater.init) window.FluentUpdater.init();
+};
+</script>
+
+<script src="store.js"></script>
+<script src="update-core.js"></script>
+<script src="updater.js"></script>
+<script type="module" src="license.js"></script>

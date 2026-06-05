@@ -1,0 +1,27 @@
+# --- secrets: NEVER commit these ---
+keys/
+*.keystore
+*.jks
+keystore.base64.txt
+secrets.txt
+
+# --- node ---
+node_modules/
+
+# --- capacitor / android build output (the android/ project itself IS committed) ---
+android/build/
+android/app/build/
+android/.gradle/
+android/captures/
+android/local.properties
+.gradle/
+
+# --- release artifacts (produced by CI) ---
+fluent-*.apk
+fluent-www-*.zip
+version.json
+
+# --- misc ---
+.DS_Store
+Thumbs.db
+*.log

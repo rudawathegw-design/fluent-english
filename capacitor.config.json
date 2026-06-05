@@ -1,0 +1,18 @@
+{
+  "appId": "com.fluent.english",
+  "appName": "Fluent",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "hostname": "fluent.app"
+  },
+  "android": {
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "CapacitorUpdater": {
+      "autoUpdate": false,
+      "resetWhenUpdate": false
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "fluent-english-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fluent — daily English program, packaged as a self-updating, licensed Android app.",
+  "scripts": {
+    "sync": "cap sync android",
+    "open:android": "cap open android",
+    "license:keygen": "node tools/keygen.js",
+    "license:new": "node tools/issue-license.js",
+    "make:version": "node tools/make-version.js",
+    "test:crypto": "node tools/test-license.js"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/device": "^6.0.2",
+    "@capacitor/preferences": "^6.0.3",
+    "@capgo/capacitor-updater": "^6.14.4",
+    "@noble/ed25519": "^2.1.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0"
+  }
+}
