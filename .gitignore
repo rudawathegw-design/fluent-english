@@ -20,6 +20,9 @@ android/local.properties
 fluent-*.apk
 fluent-www-*.zip
 version.json
+desktop/dist/
+Fluent-Setup-*.exe
+latest.yml
 
 # --- misc ---
 .DS_Store

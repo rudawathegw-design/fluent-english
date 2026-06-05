@@ -1,0 +1,19 @@
+{
+  "appId": "com.fluent.english",
+  "productName": "Fluent",
+  "copyright": "Fluent",
+  "directories": { "output": "dist" },
+  "files": ["main.js", "package.json"],
+  "extraResources": [{ "from": "../www", "to": "www" }],
+  "win": {
+    "target": ["nsis"],
+    "artifactName": "Fluent-Setup-${version}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "shortcutName": "Fluent"
+  },
+  "publish": [{ "provider": "github", "owner": "rudawathegw-design", "repo": "fluent-english" }]
+}

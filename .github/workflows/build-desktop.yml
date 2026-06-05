@@ -1,0 +1,44 @@
+name: build-desktop
+
+# Push a tag like v1.0.0 to build + publish the Windows desktop installer (.exe).
+# Runs on a Windows runner; reuses the shared www/ app. Publishes to the same Release.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Resolve version
+        id: ver
+        shell: bash
+        run: |
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then V="${GITHUB_REF_NAME#v}"; else V="$(node -p "require('./package.json').version")"; fi
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          echo "Building desktop version $V"
+
+      - name: Stamp version
+        shell: bash
+        run: node -e "const fs=require('fs');const p=require('./package.json');p.version='${{ steps.ver.outputs.version }}';fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build + publish Windows installer
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder --win nsis --publish always
