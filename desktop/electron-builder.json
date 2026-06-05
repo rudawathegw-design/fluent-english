@@ -15,5 +15,5 @@
     "allowToChangeInstallationDirectory": true,
     "shortcutName": "Fluent"
   },
-  "publish": [{ "provider": "github", "owner": "rudawathegw-design", "repo": "fluent-english" }]
+  "publish": [{ "provider": "github", "owner": "rudawathegw-design", "repo": "fluent-english", "releaseType": "release" }]
 }
